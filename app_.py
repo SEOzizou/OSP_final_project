@@ -2,16 +2,13 @@
 #-*- coding: utf-8 -*-
 
 import math
-import argparse
-import subprocess
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from flask import render_template 
 from elasticsearch import Elasticsearch
 import re
 import requests
 import time
 from bs4 import BeautifulSoup
-#import pandas as pd
 import numpy
 
 app = Flask(__name__)
@@ -19,6 +16,7 @@ es_host = "127.0.0.1"
 es_port = "9200"
 word_freq = {} #전체 단어, 빈도수 dict
 idf = {}  #전체 단어의 idf dict
+fail_list = []
 
 def crawling(url):
 	e = {
@@ -29,7 +27,10 @@ def crawling(url):
 		'tf':[],
 		'idf':[],
 		'tf-idf':{},
+		'top10words':[],
 		'cos-similarity':{},
+		'top3urls':[],
+		'percentage':[],
 		'time':0,
 		'total':0,
 		'result':"",
@@ -101,7 +102,8 @@ def name1_check():
 			res = es.index(index = 'web', id = 1, body = e)
 		except:    # 예외가 발생했을 때 실행됨
 			result='크롤링 실패'
-		return render_template('one_output.html', result = result, e = es.get(index = 'web', id = 1)['_source'])
+			return render_template('one_output.html', result = result)
+		return render_template('one_output.html', result = result, e = e)
 
 
 @app.route('/multi_output', methods=["POST"])
@@ -126,9 +128,10 @@ def name2_check():
 				if urls.index(url) != index:
 						e['overlap'] = 1
 						res[urls.index(url)]['overlap'] = 1
-				res.append(e)
 				e['result'] = "크롤링 성공"
-				index += 1
+				if e['result'] == "크롤링 성공" :
+					res.append(e)
+					index += 1
 	
 			for i in idf.keys():  #전체 단어의 idf값 구하기
 				idf[i] = round(math.log10(len(urls)/idf[i]), 4)
@@ -145,16 +148,29 @@ def name2_check():
 				temp_similarity = {}
 				for j in range(0, len(res)): #url별 cos-similarity값 구하고 내림차순 정렬
 					if j != i:
-						similarity = round(numpy.dot(res[i]['df'], res[j]['df'])/(numpy.linalg.norm(res[i]['df'])*numpy.linalg.norm(res[j]['df'])), 4)
+						similarity = round(numpy.dot(res[i]['df'], res[j]['df'])/(numpy.linalg.norm(res[i]['df'])*numpy.linalg.norm(res[j]['df']))*100, 2)
 						temp_similarity[res[j]['url']] = similarity
 				res[i]['cos-similarity'].update(sorted(temp_similarity.items(), key = (lambda x : x[1]), reverse = True))
-		
+			
+			for i in range(0, len(res)):
+				wordlist = res[i]['tf-idf'].keys()
+				for j in wordlist:
+					if len(res[i]['top10words']) == 10:
+						break
+					res[i]['top10words'].append(j)
+				urllist = res[i]['cos-similarity'].keys()
+				percentlist = res[i]['cos-similarity'].values()
+				for j in urllist:
+					res[i]['top3urls'].append(j)
+				for j in percentlist:
+					res[i]['percentage'].append(j)
 		except:    # 예외가 발생했을 때 실행됨
 			e['result'] = "크롤링 실패"
-		es.indices.delete(index='web', ignore=[400,404])	
+			fail_list.append(e)
+		es.indices.delete(index='web', ignore=[400,404]) #web index 초기화
 		for i in range(0, len(res)): #elasticsearch에 저장
 			es.index(index='web', id = (i+1), body=res[i])
-		return render_template('multi_output.html', res=res)
+		return render_template('multi_output.html', res=res, n = len(res))
 
 
 
