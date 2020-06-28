@@ -1,8 +1,4 @@
-http://arrow.apache.org
-http://deltaspike.apache.org
-http://james.apache.org
-http://flex.apache.org
-sdkjnfkwejlfn
+http://arrow.apache.org, http://deltaspike.apache.org, ,http://james.apache.org, http://flex.apache.org ,sdkjnfkwejlfn
 http://karaf.apache.org
 http://kafka.apache.org
 ttp://airavata.apache.org
@@ -10,4 +6,3 @@ http://ambari.apache.org
 http://ambari.apache.org
 http://directory.apache.org
 http://oozie.apache.org
-

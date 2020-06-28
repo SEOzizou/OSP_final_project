@@ -113,9 +113,12 @@ def name1_check():
 def name2_check():
 	if request.method=="POST":
 		txtfile = request.files['profile'].read()
-		urls=[]
-		for x in txtfile.decode("utf-8").split():
-			urls.append(x.rstrip())
+		# urls=[]
+		txtfile = ",".join(txtfile.decode("utf-8").split()).split(",")
+		urls = [x for x in txtfile if x.strip()]
+		
+		#for x in txtfile.decode("utf-8").split():
+		#	urls.append(x.rstrip())
 	
 		es = Elasticsearch([{'host':es_host, 'port':es_port}], timeout = 30)
 		global num
