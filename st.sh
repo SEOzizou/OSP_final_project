@@ -5,8 +5,10 @@ pip3 install requests
 pip3 install bs4
 pip3 install numpy
 
-mkdir project/Webcrawling
-cp -r project/app_final.py project/templates project/Webcrawling
+
+mkdir -p project/Webcrawling
+cp -r app_final.py templates_final project/Webcrawling
+mv project/Webcrawling/templates_final project/Webcrawling/templates
 echo copy source files and templates
 
 gnome-terminal -x ./elasticsearch-7.6.2/bin/elasticsearch

@@ -64,23 +64,40 @@ hr {
 <input type = 'submit' value = 'file process'>
 </form>
 <br /> 
-
+{{result}}
 <br /><hr></p>
 
-<h3 style="color: #0272a6;">단일 url 크롤링 실행 결과</h3>
-{% if e['result'] == "크롤링 성공" %}
+<h3 style="color: #0272a6;">Open Source Project Analysis List</h3>
 <table>
   <tr>
-    <td>크롤링 성공<br>
-    {{ e['url'] }}<input style="margin: 1px; float: right;" type="button" value="TF-IDF" , class = 'button1'/><br>
-	전체 단어 수:{{ e['total'] }} <br>
-	걸린 시간: {{ e['time'] }}  <input style="margin: 1px; float: right;" type="button" value="Cos-Sim" , class = 'button1'/> <br>
+    <td>{{url}}<input style="margin: 1px; float: right;" type="button" value="TF-IDF" , class = 'button1'/><br>
+	전체 단어 수:{{total_num}} <br>
+	걸린 시간: {{time_l}}  <input style="margin: 1px; float: right;" type="button" value="Cos-Sim" , class = 'button1'/> <br>
 </td>   
-</tr>
+  </tr>
+  <td></td>
+  <tr>
+  <td></td>
+  </tr>
+  <td></td>
+  <tr>
+  <td></td>
+  </tr>
+  <tr>
+  </tr>
+  <tr>
+  </tr>
+  <tr>
+  </tr>
+  <tr>
+  </tr>
+  <tr>
+  </tr>
+  <tr>
+  </tr><tr>
+  </tr>  
 </table>
-{% else %}
-  <h3 style="color: #0272a6;">크롤링에 실패하였습니다.</h3>
-{% endif %}
+
 </body>
 </html>
 
