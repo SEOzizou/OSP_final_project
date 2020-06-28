@@ -50,54 +50,38 @@ hr {
 </head>
 <body>
 
-<div>
-<form action="\one_output" method="POST">
-<h3 style="color: #0272a6;">Enter the URL <input align="right" name="name" size="200" type="text" style="width:470px;height:25px;font-size:12px; float:right;" /></h3>
-<input style="margin: 5px; float: right;" type="submit" value="Process" , class = 'button1'/>
-</form>
-</div>
+
+<div><form action="\one_output" method="POST">
+<h3 style="color: #0272a6;">Enter the URL <input align="right" name="name" size="200" type="text" style="width:470px;height:25px;font-size:12px; float:center;" />
+<input style="margin: 5px; float: center;" type="submit" value="Process" , class = 'button1'/>
+</h3>
+</form></div>
 
 
-
-<form action ='\multi_output' method = "post" enctype = "multipart/form-data">
+<form action ='\multi_output' method = "POST" enctype = "multipart/form-data">
+<h3 style="color: #0272a6;">Upload URL text file 
 <input type = 'file', name = 'profile'>
-<input type = 'submit' value = 'file process'>
+<input type = 'submit' value = 'file process', class = 'button1'/>
+</h3>
 </form>
+
 <br /> 
-{{result}}
 <br /><hr></p>
 
-<h3 style="color: #0272a6;">Open Source Project Analysis List</h3>
+<h3 style="color: #0272a6;">단일 url 크롤링 실행 결과</h3>
+{% if e['result'] == "크롤링 성공" %}
 <table>
   <tr>
-    <td>{{url}}<input style="margin: 1px; float: right;" type="button" value="TF-IDF" , class = 'button1'/><br>
-	전체 단어 수:{{total_num}} <br>
-	걸린 시간: {{time_l}}  <input style="margin: 1px; float: right;" type="button" value="Cos-Sim" , class = 'button1'/> <br>
+    <td>크롤링 성공<br>
+    {{ e['url'] }}<input style="margin: 1px; float: right;" type="button" value="TF-IDF" , class = 'button1'/><br>
+	전체 단어 수:{{ e['total'] }} <br>
+	걸린 시간: {{ e['time'] }}  <input style="margin: 1px; float: right;" type="button" value="Cos-Sim" , class = 'button1'/> <br>
 </td>   
-  </tr>
-  <td></td>
-  <tr>
-  <td></td>
-  </tr>
-  <td></td>
-  <tr>
-  <td></td>
-  </tr>
-  <tr>
-  </tr>
-  <tr>
-  </tr>
-  <tr>
-  </tr>
-  <tr>
-  </tr>
-  <tr>
-  </tr>
-  <tr>
-  </tr><tr>
-  </tr>  
+</tr>
 </table>
-
+{% else %}
+  <h3 style="color: #0272a6;">크롤링에 실패하였습니다.</h3>
+{% endif %}
 </body>
 </html>
 
