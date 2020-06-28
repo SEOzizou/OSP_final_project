@@ -103,7 +103,7 @@ def name1_check():
 		e['total'] = len(e["words"])
 		e['result'] = '크롤링 성공'
 		global num
-		res = es.index(index = 'web', id = num, body = e)
+		res = es.index(index = num, id = num, body = e)
 		num += 1
 			
 		return render_template('one_output.html', e = e)
@@ -122,6 +122,7 @@ def name2_check():
 		res = []
 		fail_list = []
 		n = 0
+		valid = []
 		for url in urls:
 			start = time.time()  # 시작 시간 저장
 			e = crawling(url)
@@ -133,13 +134,14 @@ def name2_check():
 			e['total'] = len(e['words'])
 			words_freq_list(e)
 			e = tf(e)
-			if urls.index(url) != n:
-					e['overlap'] = 1
-					res[urls.index(url)]['overlap'] = 1
 			e['result'] = "크롤링 성공"
+			valid.append(e['url'])
+			
+			if valid.index(e['url']) != n:
+				e['overlap'] = 1
+				res[valid.index(e['url'])]['overlap'] = 1
 			res.append(e)
 			n += 1
-			
 		for i in idf.keys():  #전체 단어의 idf값 구하기
 			idf[i] = round(math.log10(len(urls)/idf[i]), 4)
 		
@@ -174,7 +176,19 @@ def name2_check():
 			
 		for i in range(0, len(res)): #elasticsearch에 저장
 			if len(res[i]['words']) != 0:
-				es.index(index='web', id = num, body=res[i])
+				e = {
+		'url':res[i]['url'],
+		'words':res[i]['words'],
+		'freq':res[i]['freq'],
+		'top10words':res[i]['top10words'],
+		'top3urls':res[i]['top3urls'],
+		'percentage':res[i]['percentage'],
+		'time':res[i]['time'],
+		'total':res[i]['total'],
+		'result':res[i]['result'],
+		'overlap':res[i]['overlap'],
+	}
+				es.index(index=num, id = 1, body=e)
 				num += 1
 				
 		return render_template('multi_output.html', res=res, n = n, fail = fail_list)
