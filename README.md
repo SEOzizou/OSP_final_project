@@ -4,10 +4,13 @@
 
 ## 참고사항
 
-- 실행시 엘라스틱서치 폴더가 안에 있어야 합니다
-  ./elasticsearch-7.6.2/bin/elasticsearch ## 그에대한 bash 파일에서의 코드입니다.
+- 실행시 엘라스틱서치 폴더가 st.sh와 같은 OSP_final_project 폴더안에 있어야 합니다  
 
-- text 파일의 구분은 엔터입니다.
+![엘라스틱](https://user-images.githubusercontent.com/44471240/85949290-e19fd900-b990-11ea-8469-95de5a284463.PNG)
+  ./elasticsearch-7.6.2/bin/elasticsearch ## 그에대한 bash 파일에서의 코드입니다.
+ 
+
+- text 파일의 구분은 ','(comma) & '\n'(white_space)입니다.
 
 
 ## 다중 URL 분석 결과
